@@ -1,6 +1,6 @@
 import React, { useState } from "react";
+import Spotify from "./utils/Spotify";
 import Playlist from "./components/Playlist/Playlist";
-import mockData from "../src/data/mockData";
 import SearchBar from "./components/SearchBar/SearchBar";
 import SearchResults from "./components/SearchResults/SearchResults";
 
@@ -10,13 +10,14 @@ function App() {
   const [playlistName, setPlaylistName] = useState("My Playlist");
 
   const handleSearch = (term) => {
-    // Filter mockData based on search term
-    const filteredTracks = mockData.filter(track =>
-        track.name.toLowerCase().includes(term.toLowerCase()) ||
-        track.artist.toLowerCase().includes(term.toLowerCase()) ||
-        track.album.toLowerCase().includes(term.toLowerCase())
-    );
-    setSearchResults(filteredTracks);
+    console.log("Search started for:", term);
+    // Search Spotify data based on search term
+    Spotify.search(term).then(tracks => {
+      console.log("Search results received:", tracks);
+      setSearchResults(tracks);
+    }).catch(error => {
+      console.error("Search failed:", error);
+    });
   };
 
   const handleNameChange = (name) => {
